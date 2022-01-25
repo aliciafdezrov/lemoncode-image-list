@@ -21,10 +21,15 @@ const CustomizedCard = styled(Card)`
 
 interface Props {
     picture: PictureInfo;
+    onSelectPicture: (id: string) => void;
 }
 
 export const PictureGridItem: React.FC<Props> = (props) => {
-    const {picture} = props;
+    const {picture, onSelectPicture} = props;
+
+    const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+        onSelectPicture(picture.id)
+    }
 
     return (
         <CustomizedCard sx={{maxWidth: 300}} className={`${classes.card} ${classes.fadeInCard}`}>
@@ -42,7 +47,7 @@ export const PictureGridItem: React.FC<Props> = (props) => {
                     </Typography>
 
                     <FormGroup>
-                        <FormControlLabel control={<Checkbox value={picture.selected}/>} label="Selected"/>
+                        <FormControlLabel control={<Checkbox onChange={handleChangeCheckbox} checked={picture.selected}/>} label="Selected"/>
                     </FormGroup>
                 </CardContent>
             </CardActionArea>

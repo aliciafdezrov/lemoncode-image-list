@@ -17,7 +17,7 @@ export const TabsLayout: React.FC = (props) => {
 
     return (
         <Box sx={{width: '100%'}}>
-            <AppBar position="static">
+            <AppBar position="static" sx={{width: `calc(100% - 300px)`, mr: `300px`}}>
                 <Tabs
                     value={location.pathname}
                     onChange={handleChange}
