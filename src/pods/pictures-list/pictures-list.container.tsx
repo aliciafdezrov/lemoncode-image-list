@@ -1,36 +1,41 @@
 import React from "react";
 import {PicturesListComponent} from "./pictures-list.component";
 import {PictureInfo} from "./pictures-list.vm";
-import {useLoad} from "./pictures-list.hooks";
 import {CartContext} from "../../core/cart/cart.context";
-import {getPictures} from "./api/pictures-list.api";
-import {mapPictureInfoListToVM} from "./pictures-list.mappers";
+import {
+    mapPictureEntityListToVM,
+    mapPictureInfoVMToEntity
+} from "./pictures-list.mappers";
+import * as entities from "../../core/entities";
 
 interface Props {
-    type: string;
+    picturesList: entities.PictureInfo[];
 }
 
 export const PicturesListContainer: React.FC<Props> = (props) => {
-    const {type} = props;
+    const {picturesList} = props;
     const [pictures, setPictures] = React.useState<PictureInfo[]>([]);
-    const {onLoadPictures} = useLoad({
-        onLoadPictures: (vm) => setPictures(vm),
-    });
-    const { selectedItems, selectItem } = React.useContext(CartContext);
+    const { selectedPictures, onAddPicture, onDeletePicture } = React.useContext(CartContext);
 
     React.useEffect(() => {
-        const copyOfPicturees = [...pictures];
-        setPictures(copyOfPicturees.map(pic => ({
+        const vmList = mapPictureEntityListToVM(picturesList);
+        setPictures(vmList.map(pic => ({
             ...pic,
-            selected: selectedItems.some(item => item === pic.id)
+            selected: selectedPictures.some(picture => picture.id === pic.id)
         })));
-    }, [selectedItems]);
+    }, [picturesList, selectedPictures]);
 
-    React.useEffect(() => {
-        onLoadPictures(type);
-    }, []);
+    const handleOnSelectPicture = (picture: PictureInfo) => {
+        const pictureEntity = mapPictureInfoVMToEntity(picture);
+        onAddPicture(pictureEntity);
+    }
+
+    const handleOnDeselectPicture = (picture: PictureInfo) => {
+        const pictureEntity = mapPictureInfoVMToEntity(picture);
+        onDeletePicture(pictureEntity);
+    }
 
     return (
-        <PicturesListComponent pictures={pictures} onSelectPicture={selectItem}/>
+        <PicturesListComponent pictures={pictures} onSelectPicture={handleOnSelectPicture} onDeselectPicture={handleOnDeselectPicture}/>
     );
 };

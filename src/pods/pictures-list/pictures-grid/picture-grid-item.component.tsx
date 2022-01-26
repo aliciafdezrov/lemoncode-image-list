@@ -9,6 +9,7 @@ import {styled} from '@mui/material/styles';
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import {PictureInfo} from "../pictures-list.vm";
 
 const CustomizedCard = styled(Card)`
   background: #333333;
@@ -21,14 +22,19 @@ const CustomizedCard = styled(Card)`
 
 interface Props {
     picture: PictureInfo;
-    onSelectPicture: (id: string) => void;
+    onSelectPicture: (picture: PictureInfo) => void;
+    onDeselectPicture: (picture: PictureInfo) => void;
 }
 
 export const PictureGridItem: React.FC<Props> = (props) => {
-    const {picture, onSelectPicture} = props;
+    const {picture, onSelectPicture, onDeselectPicture} = props;
 
     const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onSelectPicture(picture.id)
+        if(event.target.checked) {
+            onSelectPicture(picture)
+        } else {
+            onDeselectPicture(picture)
+        }
     }
 
     return (

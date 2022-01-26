@@ -1,4 +1,9 @@
-import {PictureInfo} from "./pictures-list.api-model";
+import React from 'react';
+import {PicturesListContainer} from "../pods";
+import {CartDrawer} from "../layouts";
+import {useLocation} from "react-router-dom";
+import {switchRoutes} from "../core/router";
+import {PictureInfo} from "../core/entities";
 
 const kittiesList = [
     {
@@ -106,9 +111,21 @@ const puppiesList = [
     },
 ];
 
-export const getPictures = (type: string): PictureInfo[] => {
-    if (type === "kitties") {
-        return kittiesList;
-    }
-    return puppiesList;
+export const PicturesListScene: React.FC = () => {
+    const location = useLocation();
+
+    const pictures = React.useMemo(() : PictureInfo[] => {
+        if(location.pathname === switchRoutes.kitties) {
+            return kittiesList;
+        }
+
+        return puppiesList;
+    }, [location.pathname]);
+
+    return (
+        <>
+            <CartDrawer/>
+            <PicturesListContainer picturesList={pictures}/>
+        </>
+    );
 };

@@ -6,4 +6,6 @@ export const gridContainer = css`
   justify-content: center;
   align-items: center;
   background: #24282f;
+  height: 100vh;
+  overflow-y: auto;
 `;

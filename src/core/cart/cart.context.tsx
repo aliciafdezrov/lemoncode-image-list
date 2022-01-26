@@ -1,36 +1,55 @@
 import React from 'react';
+import {PictureInfo} from "../entities";
 
 interface CartContextModel {
-    selectedItems: string[];
-    selectItem: (id: string) => void;
+    selectedPictures: PictureInfo[];
+    onAddPicture: (picture: PictureInfo) => void;
+    onDeletePicture: (picture: PictureInfo) => void;
+    onClearPictures: () => void;
 }
 
 export const CartContext = React.createContext<CartContextModel>({
-    selectedItems: [],
-    selectItem: (id: string) => {
+    selectedPictures: [],
+    onAddPicture: (picture: PictureInfo) => {
         console.log('Did you forgot to add CartContext on top of your app?');
     },
+    onDeletePicture: (picture: PictureInfo) => {
+        console.log('Did you forgot to add CartContext on top of your app?');
+    },
+    onClearPictures: () => {
+        console.log('Did you forgot to add CartContext on top of your app?');
+    }
 });
 
 export const CartProvider: React.FC = props => {
-    const { children } = props;
-    const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
+    const {children} = props;
+    const [selectedPictures, setSelectedPictures] = React.useState<PictureInfo[]>([]);
 
-    const handleOnSelectItems = (id: string) => {
-        const newSelectedItems = [...selectedItems];
+    const handleOnAddPicture = (picture: PictureInfo) => {
+        const copyOfSelectedPictures = [...selectedPictures];
+        copyOfSelectedPictures.push(picture);
+        setSelectedPictures(copyOfSelectedPictures);
+    }
 
-        if(newSelectedItems.some(selectedItem => selectedItem === id)) {
-            const indexOfId = newSelectedItems.indexOf(id);
-            newSelectedItems.splice(indexOfId, 1);
-        } else {
-            newSelectedItems.push(id);
-        }
+    const handleOnDeletePicture = (picture: PictureInfo) => {
+        const copyOfSelectedPictures = [...selectedPictures];
+        const picIndex = copyOfSelectedPictures.findIndex(pic => pic.id === picture.id);
+        copyOfSelectedPictures.splice(picIndex, 1);
+        setSelectedPictures(copyOfSelectedPictures);
+    }
 
-        setSelectedItems(newSelectedItems);
+    const handleOnClearPictures = () => {
+        setSelectedPictures([]);
     }
 
     return (
-        <CartContext.Provider value={{ selectedItems, selectItem: handleOnSelectItems }}>
+        <CartContext.Provider
+            value={{
+                selectedPictures,
+                onAddPicture: handleOnAddPicture,
+                onDeletePicture: handleOnDeletePicture,
+                onClearPictures: handleOnClearPictures
+            }}>
             {children}
         </CartContext.Provider>
     );
