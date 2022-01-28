@@ -2,10 +2,7 @@ import React from "react";
 import {PicturesListComponent} from "./pictures-list.component";
 import {PictureInfo} from "./pictures-list.vm";
 import {CartContext} from "../../core/cart/cart.context";
-import {
-    mapPictureEntityListToVM,
-    mapPictureInfoVMToEntity
-} from "./pictures-list.mappers";
+import {mapPictureEntityListToVM} from "./pictures-list.mappers";
 import * as entities from "../../core/entities";
 
 interface Props {
@@ -15,7 +12,7 @@ interface Props {
 export const PicturesListContainer: React.FC<Props> = (props) => {
     const {picturesList} = props;
     const [pictures, setPictures] = React.useState<PictureInfo[]>([]);
-    const { selectedPictures, onAddPicture, onDeletePicture } = React.useContext(CartContext);
+    const {selectedPictures} = React.useContext(CartContext);
 
     React.useEffect(() => {
         const vmList = mapPictureEntityListToVM(picturesList);
@@ -25,17 +22,7 @@ export const PicturesListContainer: React.FC<Props> = (props) => {
         })));
     }, [picturesList, selectedPictures]);
 
-    const handleOnSelectPicture = (picture: PictureInfo) => {
-        const pictureEntity = mapPictureInfoVMToEntity(picture);
-        onAddPicture(pictureEntity);
-    }
-
-    const handleOnDeselectPicture = (picture: PictureInfo) => {
-        const pictureEntity = mapPictureInfoVMToEntity(picture);
-        onDeletePicture(pictureEntity);
-    }
-
     return (
-        <PicturesListComponent pictures={pictures} onSelectPicture={handleOnSelectPicture} onDeselectPicture={handleOnDeselectPicture}/>
+        <PicturesListComponent pictures={pictures}/>
     );
 };

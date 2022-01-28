@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
-import {switchRoutes} from "../core/router";
+import {switchRoutes} from "../router";
 import {useLocation, useNavigate} from "react-router-dom";
 
 export const TabsLayout: React.FC = (props) => {
@@ -17,7 +17,7 @@ export const TabsLayout: React.FC = (props) => {
 
     return (
         <Box sx={{width: '100%'}}>
-            <AppBar position="fixed" sx={{width: `calc(100% - 300px)`, mr: `300px`}}>
+            <AppBar position="relative">
                 <Tabs
                     value={location.pathname}
                     onChange={handleChange}
